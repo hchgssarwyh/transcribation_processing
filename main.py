@@ -4,19 +4,8 @@ import uvicorn
 import boto3
 import requests
 import time
-from utils impor ChunkSpliter
 
 app = FastAPI()
-
-
-
-# Инициализация клиента S3
-s3_client = boto3.client(
-    's3',
-    aws_access_key_id=S3_ACCESS_KEY,
-    aws_secret_access_key=S3_SECRET_KEY,
-    region_name=S3_REGION
-)
 
 # Модель для результата обработки
 class ProcessingResult(BaseModel):
@@ -27,7 +16,6 @@ class ProcessingResult(BaseModel):
 async def upload_document(file: UploadFile = File(...)):
     # Загрузка файла в S3
     try:
-        s3_client.upload_fileobj(file.file, S3_BUCKET, file.filename)
         # Отправка запроса на обработку в другой сервис
         response = requests.post("https://other-service.com/process", json={"file_name": file.filename})
         return {"message": "File uploaded and processing started.", "response": response.json()}
